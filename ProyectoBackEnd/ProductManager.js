@@ -1,9 +1,12 @@
+const fs = requiere('fs');
+
 class ProductManager {
 
+    
     #id = 0;
-    constructor(){
+    constructor(path){
         this.products = [];
-
+        this.path= path;
     }
     // Creates product if fields are not null and if the code is unique. Pushes it to products array
     addProduct(title, description, price, thumbnail, code, stock){
@@ -25,11 +28,14 @@ class ProductManager {
                     stock
                 }
                 this.products.push(product);
+                return product;
 
             }else{
                 console.log("addProduct --> el código ya existe en el array de productos");
+                return null;
             }
         }
+        
                 
     }
     
@@ -41,9 +47,11 @@ class ProductManager {
 
     getProductById(id){
         let productFound = this.products.find(prod=>prod.id === id);
-        return productFound ? productFound: "not found";
+        return productFound ? productFound: null ;
     }
 }
+
+
 
 
 /*      Test Cases
