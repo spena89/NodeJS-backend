@@ -6,6 +6,7 @@ class ProductManager {
     #id = 0;
     constructor(path){
         this.products = [];
+        asdasd
         this.path= path;
     }
     // Creates product if fields are not null and if the code is unique. Pushes it to products array
