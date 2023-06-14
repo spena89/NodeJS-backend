@@ -1,0 +1,16 @@
+{
+  "name": "proyectobackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ProductManager.js",
+  "scripts": {
+    "start": "ProductManager.js",
+    "dev": "nodemon ProductManager.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
+}
