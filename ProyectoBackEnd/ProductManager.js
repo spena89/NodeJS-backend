@@ -35,12 +35,12 @@ class ProductManager {
                         stock,
                     };
                     productsFile.push(product);
-                    await fs.promises.writeFile(
-                        this.path,
-                        JSON.stringify(productsFile)
-                    );
                     return product;
                 }
+                await fs.promises.writeFile(
+                    this.path,
+                    JSON.stringify(productsFile)
+                );
             }
         } catch (error) {
             console.log(error);
@@ -78,7 +78,7 @@ class ProductManager {
         try {
             const productList = await this.getProducts();
             const productIndex = this.findProductIndex(productList, id);
-            const productToUpdate = productList[productIndex];
+            let productToUpdate = productList[productIndex];
             if (productToUpdate) {
                 productToUpdate = {...productToUpdate, ...product}
                 fs.writeFile(
@@ -94,7 +94,7 @@ class ProductManager {
     async deleteProduct(id) {
         try {
             const productList = await this.getProducts();
-            productList.splice(findProductIndex(productList, id), 1);
+            productList.splice(this.findProductIndex(productList, id), 1);
             await fs.promises.writeFile(
                 this.path,
                 JSON.stringify(productList)
