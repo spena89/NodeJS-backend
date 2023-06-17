@@ -2,11 +2,11 @@
   "name": "proyectobackend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/Server.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ProductManager.js"
+    "dev": "nodemon ."
   },
   "author": "",
   "license": "ISC",
