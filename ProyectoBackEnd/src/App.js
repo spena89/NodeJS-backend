@@ -14,13 +14,18 @@ app.get('/products', async (req, res)=>{
     try {
         const {limit} = req.query;
         const products = await pm.getProducts();
-        const productList = []; 
-        for(let i=0; i < limit; i++){
-            if(products[i]){
-                productList.push(products[i]);
+        const productList = [];
+        if(limit){
+            for(let i=0; i < limit; i++){
+                if(products[i]){
+                    productList.push(products[i]);
+                }
             }
+            res.status(200).json(productList);
+
+        }else{
+            res.status(200).json(products);
         }
-        res.status(200).json(productList);
     } catch (error) {
         res.status(404).json({message: error.message});
     }
