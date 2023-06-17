@@ -2,9 +2,10 @@
   "name": "proyectobackend",
   "version": "1.0.0",
   "description": "",
-  "main": "ProductManager.js",
+  "main": "src/Server.js",
+  "type": "module",
   "scripts": {
-    "start": "ProductManager.js",
+    "start": "node .",
     "dev": "nodemon ProductManager.js"
   },
   "author": "",
