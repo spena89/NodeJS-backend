@@ -22,7 +22,6 @@ app.get('/products', async (req, res)=>{
                 }
             }
             res.status(200).json(productList);
-
         }else{
             res.status(200).json(products);
         }
