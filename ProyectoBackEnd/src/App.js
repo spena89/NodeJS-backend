@@ -2,7 +2,7 @@ import express from 'express';
 import productManager from './ProductManager.js';
 
 
-const app = express();
+let app = express();
 
 //reconoce info que llega desde el body y url
 app.use(express.json());
@@ -13,17 +13,13 @@ const pm = new productManager('./products.json');
 app.get('/products', async (req, res)=>{
     try {
         const {limit} = req.query;
-        const products = await pm.getProducts();
+        const allProducts = await pm.getProducts();
         const productList = [];
         if(limit){
-            for(let i=0; i < limit; i++){
-                if(products[i]){
-                    productList.push(products[i]);
-                }
-            }
+            productList = allProducts.slice(limit)
             res.status(200).json(productList);
         }else{
-            res.status(200).json(products);
+            res.status(200).json(allProducts);
         }
     } catch (error) {
         res.status(404).json({message: error.message});
@@ -32,6 +28,7 @@ app.get('/products', async (req, res)=>{
 
 app.get('/products/:pid', async(req, res)=>{
 try {
+    
     const {pid} = req.params;
     const product = await pm.getProductById(Number(pid));
     if(product){

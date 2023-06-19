@@ -7,12 +7,12 @@ export default class ProductManager {
     }
 
     async #getMaxId(){
-        let maxID = 0;
+        const MaxId = 0;
         const products = await this.getProducts();
         products.map((prod) => {
-            if(prod.id > maxId) maxId = prod.id
+            if(prod.id > MaxId) MaxId = prod.id
         })
-        return maxId;
+        return MaxId;
         }
     
     // Creates product if fields are not null and if the code is unique. Pushes it to products array
@@ -27,7 +27,7 @@ export default class ProductManager {
                 stock != null
             ) {
                 const productsFile = await this.getProducts();
-                let verifyCode = productsFile.find(
+                const verifyCode = productsFile.find(
                     (prod) => prod.code === code
                 );
 
@@ -73,7 +73,7 @@ export default class ProductManager {
     async getProductById(id) {
         try {
             const products = await this.getProducts();
-            let productFound = await products.find(
+            const productFound = await products.find(
                 (prod) => prod.id === id
             );
             return productFound ? productFound : false;
@@ -86,7 +86,7 @@ export default class ProductManager {
         try {
             const productList = await this.getProducts();
             const productIndex = await this.findProductIndex(productList, id);
-            let productToUpdate = productList[productIndex];
+            const productToUpdate = productList[productIndex];
             if (productToUpdate) {
                 productToUpdate = {...productToUpdate, ...product}
                 fs.writeFile(
