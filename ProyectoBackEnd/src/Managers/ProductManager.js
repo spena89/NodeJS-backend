@@ -1,14 +1,10 @@
 import fs from 'fs';
+import {__dirname} from '../utils.js';
+const pathFile = __dirname + "/db/products.json";
 
-
-export default class ProductManager {
-    constructor(path) {
-        this.path = path;
-    }
-
-    async #getMaxId(){
+    export const getMaxId = async ()=>{
         const MaxId = 0;
-        const products = await this.getProducts();
+        const products = await getProducts();
         products.map((prod) => {
             if(prod.id > MaxId) MaxId = prod.id
         })
@@ -16,17 +12,16 @@ export default class ProductManager {
         }
     
     // Creates product if fields are not null and if the code is unique. Pushes it to products array
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    export const addProduct = async (title, description, price, thumbnails, code, stock) => {
         try {
             if (
                 title != null &&
                 description != null &&
                 price != null &&
-                thumbnail != null &&
                 code != null &&
                 stock != null
             ) {
-                const productsFile = await this.getProducts();
+                const productsFile = await getProducts();
                 const verifyCode = productsFile.find(
                     (prod) => prod.code === code
                 );
@@ -36,14 +31,16 @@ export default class ProductManager {
                         title,
                         description,
                         price,
-                        thumbnail,
-                        id: await this.#getMaxId() + 1,
-                        code,
+                        status:true,
                         stock,
+                        category,
+                        thumbnails,
+                        id: await getMaxId() + 1,
+                        code,
                     };
                     productsFile.push(product);
                     await fs.promises.writeFile(
-                        this.path,
+                        pathFile,
                         JSON.stringify(productsFile))
                     
                 }
@@ -56,10 +53,10 @@ export default class ProductManager {
         }
     }
 
-    async getProducts() {
+    export const getProducts = async () => {
         try {
-            if (fs.existsSync(this.path)) {
-                const products = await fs.promises.readFile(this.path, "utf-8");
+            if (fs.existsSync(pathFile)) {
+                const products = await fs.promises.readFile(pathFile, "utf-8");
                 const productsJS = JSON.parse(products);
                 return productsJS;
             } else {
@@ -70,9 +67,9 @@ export default class ProductManager {
         }
     }
 
-    async getProductById(id) {
+    export const getProductById = async (id) => {
         try {
-            const products = await this.getProducts();
+            const products = await getProducts();
             const productFound = await products.find(
                 (prod) => prod.id === id
             );
@@ -82,15 +79,15 @@ export default class ProductManager {
         }
     }
 
-    async updateProduct(id, product) {
+    export const updateProduct = async (id, product) => {
         try {
-            const productList = await this.getProducts();
-            const productIndex = await this.findProductIndex(productList, id);
+            const productList = await getProducts();
+            const productIndex = await findProductIndex(productList, id);
             const productToUpdate = productList[productIndex];
             if (productToUpdate) {
                 productToUpdate = {...productToUpdate, ...product}
                 fs.writeFile(
-                    this.path,
+                    pathFile,
                      JSON.stringify(productList), (err) =>{ if(err) throw new Error ('id not found');}
                 );
             }
@@ -99,12 +96,12 @@ export default class ProductManager {
         }
     }
 
-    async deleteProduct(id) {
+    export const deleteProduct = async (id) => {
         try {
-            const productList = await this.getProducts();
-            productList.splice(this.findProductIndex(productList, id), 1);
+            const productList = await getProducts();
+            productList.splice(findProductIndex(productList, id), 1);
             await fs.promises.writeFile(
-                this.path,
+                pathFile,
                 JSON.stringify(productList)
             );
             return productList;
@@ -113,23 +110,11 @@ export default class ProductManager {
         }
     }
 
-    async findProductIndex(products, id) {
+    export const findProductIndex = async (products, id) => {
         try {
             return products.findIndex((prod) => prod.id === id);
         } catch (error) {
             return error;
         }
     }
-}
-
-
-let pm = new ProductManager("../products.json");
-let test = async () => {
-    let lala = await pm.addProduct("asdd", "asad", 20333, "assdd", 1111, 22222)
-    let asd = await pm.addProduct("234", "234", 234, "234", 234, 122343)
-    let productis = await pm.getProducts();
-    console.log(productis);
-};
-
-test();
 
