@@ -10,9 +10,9 @@ const router = Router();
 
 router.post("/", async (req, res) => {
     try {
-        const newCarrito = await newCart();
+        await newCart();
         res.status(200).json({
-            msg: `Cart ${newCarrito.id} created successfully: ${newCarrito.products}`,
+            msg: `cart created successfully`,
         });
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -21,20 +21,14 @@ router.post("/", async (req, res) => {
 
 router.post("/:idCart/product/:idProduct", async (req, res) => {
     try {
-        const { idCart, idProd } = req.params;
-        const newCart = await saveProductToCart(
+        const { idCart, idProduct } = req.params;
+        const cart = await saveProductToCart(
             parseInt(idCart),
-            parseInt(idProd)
+            parseInt(idProduct)
         );
-        if (cart === "Cart not found") {
-            res.status(500).json({ message: "Cart not found" });
-        } else if (cart === "Product not found") {
-            res.status(500).json({ message: "Product not found" });
-        } else {
-            res.status(200).json({
-                msg: `Cart ${newCart.id} updated successfully: ${newCart.products}`,
-            });
-        }
+        res.status(200).json({
+            msg: `cart ${cart.id} updated successfully`,
+        });
     } catch (error) {
         res.status(500).send({ msg: error.message });
     }
@@ -44,7 +38,7 @@ router.get("/:cid", async (req, res) => {
     try {
         const { cid } = req.params;
         const cart = await getCartById(parseInt(cid));
-        if (cart === "Not found") {
+        if (!cart) {
             res.status(404).json({ message: "cart not found" });
         } else {
             res.status(200).json(cart.products);

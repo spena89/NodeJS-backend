@@ -73,9 +73,9 @@ const pathFile = __dirname + "/db/products.json";
             const productFound = await products.find(
                 (prod) => prod.id === id
             );
-            return productFound ? productFound : false;
+            return productFound ? productFound : false; // TODO: return same type
         } catch (error) {
-            console.log(error);
+            console.log(error); // TODO: throw or handle, else remove
         }
     }
 

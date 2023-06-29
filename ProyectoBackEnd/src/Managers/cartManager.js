@@ -4,105 +4,72 @@ import { getProductById } from "./ProductManager.js";
 const pathFile = __dirname + "/db/carts.json";
 
 export const getMaxId = async () => {
-    const MaxId = 0;
+    let maxId = 0;
     const cart = await getCarts();
     cart.map((c) => {
-        if (c.id > MaxId) MaxId = c.id;
+        if (Number(c.id) > maxId) {
+            maxId = Number(c.id);
+        }
     });
-    return MaxId;
+    return maxId;
 };
 
-// Creates product if fields are not null and if the code is unique. Pushes it to products array
 export const newCart = async () => {
-    try {
-        const cartsFile = await getCarts();
-        const newCart = {
-            id: (await getMaxId()) + 1,
-            products: [],
-        };
-        cartsFile.push(newCart);
-        await fs.promises.writeFile(pathFile, JSON.stringify(cartsFile));
-        return newCart;
-    } catch (error) {
-        console.log(error);
-    }
+    const carts = await getCarts();
+    let newCart = {
+        id: (await getMaxId()) + 1,
+        products: [],
+    };
+    carts.push(newCart);
+    await fs.promises.writeFile(pathFile, JSON.stringify(carts));
+    return newCart;
 };
 
 export const getCarts = async () => {
-    try {
-        if (fs.existsSync(pathFile)) {
-            const carts = await fs.promises.readFile(pathFile, "utf-8");
-            if(carts){
-                const cartsJS = await JSON.parse(carts);
-                return cartsJS;
-            }else{
-            return [];
-            }
-        } else {
-            return [];
-        }
-    } catch (error) {
-        console.log(error);
-    }
+    const carts = await fs.promises.readFile(pathFile, "utf-8");
+    const parsedCarts = await JSON.parse(carts ? carts : "[]");
+    return parsedCarts;
 };
 
 export const getCartById = async (id) => {
-    try {
-        const cartsFile = await getCarts();
-        const cartFound = await cartsFile.find((c) => c.id === id);
-        return cartFound ? cartFound : "Not found";
-    } catch (error) {
-        console.log(error);
-    }
+    const carts = await getCarts();
+    return carts.find((c) => c.id === id);
 };
 
 export const saveProductToCart = async (idCart, idProduct) => {
-    try {
-        const cartList = await getCarts();
-        const cartExist = await getCartById(idCart);
-        const prodIdExists = await getProductById(idProduct);
-        if (prodIdExists) {
-            if (cartExist) {
-                const productExistInCart = cartExist.products.find(
-                    (prod) => prod.id === idProduct
-                );
-                if (productExistInCart) {
-                    productExistInCart.quantity + 1;
-                } else {
-                    const prod = {
-                        id: idProduct,
-                        quantity: 1,
-                    };
-                    cartExist.products.push(prod);
-                }
-                await fs.promises.writeFile(pathFile, JSON.stringify(cartList));
-                return cartExist;
-            }else{
-                return "Cart not found";
+    const carts = await getCarts();
+    const cart = carts.find((c) => c.id === idCart);
+    const product = await getProductById(idProduct);
+    if (product) {
+        if (cart) {
+            const cartProduct = cart.products.find(
+                (prod) =>prod.id === idProduct);
+            if (cartProduct) {
+                cartProduct.quantity += 1;
+            } else {
+                const prod = {
+                    id: idProduct,
+                    quantity: 1,
+                };
+                cart.products.push(prod);
             }
+            await fs.promises.writeFile(pathFile, JSON.stringify(carts));
+            return cart;
         } else {
-            return "product not found";
+            throw new Error("cart not found");
         }
-    } catch (error) {
-        console.log(error);
+    } else {
+        throw new Error("product not found");
     }
 };
 
 export const deleteCart = async (id) => {
-    try {
-        const productList = await getProducts();
-        productList.splice(findProductIndex(productList, id), 1);
-        await fs.promises.writeFile(pathFile, JSON.stringify(productList));
-        return productList;
-    } catch (error) {
-        return error;
-    }
+    const productList = await getProducts();
+    productList.splice(findProductIndex(productList, id), 1);
+    await fs.promises.writeFile(pathFile, JSON.stringify(productList));
+    return productList;
 };
 
 export const findCartIndex = async (products, id) => {
-    try {
-        return products.findIndex((prod) => prod.id === id);
-    } catch (error) {
-        return error;
-    }
+    return products.findIndex((prod) => prod.id === id);
 };
