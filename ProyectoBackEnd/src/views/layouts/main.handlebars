@@ -1,0 +1,17 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Handlebars</title>
+    </head>
+    <body>
+        {{! inicio layout en layout lo que se muestra acá queda fijo independiente del cambio de vistas }}
+        <h1>Hello world</h1>
+
+        {{! inicio body. En el body es donde van a verse las diferentes vistas }}
+        {{{body}}}
+        {{! fin body  }}
+
+        {{! fin layout }}
+    </body>
+</html>
