@@ -3,7 +3,9 @@ import productRouter from './routes/product.router.js'
 import cartRouter from './routes/carts.router.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils.js"; 
+import  {Server} from 'socket.io';
+
 
 const app = express();
 
@@ -17,8 +19,18 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
+app.get('/realTimeProducts', (req, res) =>{
+    res.render('realTimeProducts')
+})
+
 app.use('/', viewsRouter);
 
-app.listen(8080, ()=>{
+const httpServer = app.listen(8080, ()=>{
     console.log('server listening on port 8080');
+});
+
+const socketServer = new Server(httpServer);
+
+socketServer.on('connection',(socket) => {
+
 })
