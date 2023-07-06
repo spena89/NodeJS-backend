@@ -5,6 +5,7 @@ import {
     getProductById,
     getProducts,
     updateProduct,
+    deleteProduct,
 } from "../Managers/ProductManager.js";
 
 const router = Router();
@@ -15,10 +16,10 @@ router.get("/", async (req, res) => {
         const products = await getProducts();
         let productList = [];
         if (limit && limit >= 0) {
-            productList = products.slice(0,parseInt(limit));
+            productList = products.slice(0, parseInt(limit));
             res.status(200).json(productList);
         } else {
-           res.status(200).json(products);
+            res.status(200).json(products);
         }
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -39,22 +40,31 @@ router.get("/:pid", async (req, res) => {
     }
 });
 
-
 router.post("/", async (req, res) => {
     try {
-        const newProduct = req.body;
-        const productAdded = await addProduct(newProduct);
-        res.json(productAdded );
+        const { title, description, price, thumbnails, code, stock, category } =
+            req.body;
+
+        const productAdded = await addProduct(
+            title,
+            description,
+            price,
+            thumbnails,
+            code,
+            stock,
+            category
+        );
+        res.json(productAdded);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const newProduct = await getProductById(id);
-        if (newProduct) await updateProduct(id, newProduct);
+        const newProduct = req.body;
+        const product = await updateProduct(id, newProduct);
         res.status(200).json({ product });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -65,15 +75,14 @@ router.delete("/:pid", async (req, res) => {
     try {
         const { pid } = req.params;
         const prod = await getProductById(parseInt(pid));
-        if (prod){
-            const deleteProduct = await deleteProduct(parseInt(pid)); 
-            res.status(200).json({ deleteProduct }); 
-        }else{
+        if (prod) {
+            const deletedProduct = await deleteProduct(parseInt(pid));
+            res.status(200).json({ deletedProduct });
+        } else {
             res.status(500).json({ message: "Product not found" });
         }
-        
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
