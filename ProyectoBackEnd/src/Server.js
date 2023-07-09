@@ -33,4 +33,8 @@ const socketServer = new Server(httpServer);
 
 socketServer.on("connection", async (socket) => {
     socket.emit("allProducts", await getProducts());
+    socket.on("newProduct", async (product) => {
+        await addProduct(product);
+        socketServer.emit("allProducts", await getProducts());
+    });
 });
