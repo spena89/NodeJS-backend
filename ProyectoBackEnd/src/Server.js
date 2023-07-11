@@ -40,6 +40,7 @@ socketServer.on("connection", (socket) => {
         console.log(`user disconnected  ${socket.id}`);
     });
     socket.on("newProduct", async (product) => {
+        console.log(product)
         await addProduct(product);
         socketServer.emit("allProducts", await getProducts());
     });

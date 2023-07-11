@@ -16,7 +16,7 @@ prodForm.onsubmit = (send) => {
         code: inputCode.value,
         price: inputPrice.value,
         stock: inputStock.value,
-        category: inputCat.value
+        category: "test"
     }
     console.log(newProduct);
     socketClient.emit('newProduct', newProduct);
