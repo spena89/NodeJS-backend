@@ -52,5 +52,15 @@
         "id": 5,
         "code": 234,
         "stock": 122343
+    },
+    {
+        "title": "test",
+        "description": "test",
+        "price": "25",
+        "status": true,
+        "stock": "2",
+        "category": "test",
+        "id": 6,
+        "code": "136"
     }
 ]

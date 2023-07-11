@@ -3,7 +3,7 @@ import { __dirname } from "../utils.js";
 const pathFile = __dirname + "/db/products.json";
 
 export const getMaxId = async () => {
-    const MaxId = 0;
+    let MaxId = 0;
     const products = await getProducts();
     products.map((prod) => {
         if (prod.id > MaxId) MaxId = prod.id;
@@ -18,7 +18,8 @@ export const addProduct = async (
     price,
     thumbnails,
     code,
-    stock
+    stock,
+    category
 ) => {
     if (!title || !description || !price || !code || !stock) {
         throw new Error("one or more parameters are null or empty");
