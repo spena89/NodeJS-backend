@@ -49,3 +49,5 @@ socketServer.on("connection", (socket) => {
 
 //   socket.on('connection', async (socket) => {
 //  socket.emit('allProducts', await getProducts());
+
+
