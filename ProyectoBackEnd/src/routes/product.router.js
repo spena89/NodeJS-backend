@@ -1,16 +1,23 @@
 import { Router } from "express";
-import { __dirname } from "../utils.js";
-import {
-    addProduct,
-    getProductById,
-    getProducts,
-    updateProduct,
-    deleteProduct,
-} from "../Managers/ProductManager.js";
+import * as controller from "../controllers/product.controllers.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get('/', controller.getAll);
+
+router.get('/:id', controller.getById);
+
+router.post('/', controller.create);
+
+router.put('/:id', controller.update);
+
+router.delete('/:id', controller.remove);
+
+
+
+export default router;
+
+/* router.get("/", async (req, res) => {
     try {
         const { limit } = req.query;
         const products = await getProducts();
@@ -85,5 +92,4 @@ router.delete("/:pid", async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-export default router;
+*/

@@ -1,6 +1,7 @@
 import fs from "fs";
-import { __dirname } from "../utils.js";
+import { __dirname } from "../../utils.js";
 const pathFile = __dirname + "/db/products.json";
+
 
 export const getMaxId = async () => {
     let MaxId = 0;
